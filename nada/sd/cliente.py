@@ -2,7 +2,7 @@
 import bluetooth
 
 # Dirección MAC del servidor (cambiar por la dirección del servidor)
-direccion_servidor = "XX:XX:XX:XX:XX:XX"  # Reemplaza con la dirección MAC del servidor
+direccion_servidor = "54:9F:40:30:F1"  # Reemplaza con la dirección MAC del servidor
 puerto = 1  # Debe coincidir con el puerto que escucha el servidor
 
 def enviar_archivo(nombre_archivo):
