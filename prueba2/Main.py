@@ -4,26 +4,21 @@ import bluetooth
 import threading
 
 class BluetoothApp:
-
-    
-    def __init__(self, root, ancho, alto):
+    def __init__(self, root, ancho=400, alto=300):
         self.root = root
         self.root.title("Gestión de Dispositivos Bluetooth")
-            # Obtener el tamaño de la pantalla
-        pantalla_ancho = self.winfo_screenwidth()
-        pantalla_alto = self.winfo_screenheight()
         
-            # Calcular la posición x e y para centrar la ventana
+        # Obtener el tamaño de la pantalla
+        pantalla_ancho = self.root.winfo_screenwidth()
+        pantalla_alto = self.root.winfo_screenheight()
+        
+        # Calcular la posición x e y para centrar la ventana
         x = (pantalla_ancho - ancho) // 2
         y = (pantalla_alto - alto) // 2
         
         # Ajustar la posición y el tamaño de la ventana
-        self.geometry(f"{ancho}x{alto}+{x}+{y}")
-        ancho_ventana =250
-        alto_ventana=300
-
+        self.root.geometry(f"{ancho}x{alto}+{x}+{y}")
         
-
         # Botón para abrir la ventana de búsqueda de dispositivos
         self.add_device_button = tk.Button(root, text="Agregar dispositivos Bluetooth", command=self.open_search_window)
         self.add_device_button.pack(pady=20)
@@ -35,29 +30,23 @@ class BluetoothApp:
         
         # Etiqueta y botón de búsqueda
         tk.Label(self.search_window, text="Buscando dispositivos...").pack(pady=10)
-        threading.Thread(target=self.scan_for_devices).start()  # Ejecutar escaneo en hilo separado
+        
+        # Ejecutar escaneo en un hilo separado
+        threading.Thread(target=self.scan_for_devices).start()
 
     def scan_for_devices(self):
         # Escaneo de dispositivos Bluetooth cercanos
         nearby_devices = bluetooth.discover_devices(lookup_names=True, duration=8)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         # Mostrar dispositivos encontrados o mensaje de no encontrados
         if not nearby_devices:
             tk.Label(self.search_window, text="No se encontraron dispositivos Bluetooth.").pack()
         else:
             for addr, name in nearby_devices:
-                device_button = tk.Button(self.search_window, text=f"Conectar a {name} ({addr})",
-                                          command=lambda addr=addr: self.connect_to_device(addr))
+                device_button = tk.Button(
+                    self.search_window, text=f"Conectar a {name} ({addr})",
+                    command=lambda addr=addr: self.connect_to_device(addr)
+                )
                 device_button.pack(pady=5)
 
     def connect_to_device(self, addr):
@@ -97,5 +86,7 @@ class BluetoothApp:
 
 # Configuración de la ventana principal
 root = tk.Tk()
-app = BluetoothApp(root)
+ancho_ventana = 400
+alto_ventana = 300
+app = BluetoothApp(root, ancho=ancho_ventana, alto=alto_ventana)
 root.mainloop()
